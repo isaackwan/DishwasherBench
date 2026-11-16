@@ -13,10 +13,11 @@ corepack enable
 pnpm install --frozen-lockfile
 node scripts/check-static-upstream.mjs
 pnpm --filter @spotless/web typecheck
+pnpm exec tsx apps/web/scripts/static-browser.e2e.ts
 VITE_STATIC_MODE=true pnpm --filter @spotless/web build
 ```
 
-The result is `apps/web/dist`. Serve it as static files over HTTPS. Relative asset paths support GitHub Pages project URLs; the same output can be uploaded to another static host. GitHub Pages must be configured to use GitHub Actions as the source. The workflow deploys on updates to `static-browser` and can be run manually.
+The result is `apps/web/dist`. Serve it as static files over HTTPS. Relative asset paths support GitHub Pages project URLs; the same output can be uploaded to another static host. GitHub Pages must be configured to use GitHub Actions as the source. The browser smoke test checks local sessions, placing a plate and an empty wash without API requests; it does not validate WebGPU or a loaded-item wash. The workflow builds on updates to `static-browser`, publishes a downloadable `dishwasherbench-static` artifact for R2 or other hosts, and deploys to Pages once Pages is enabled. It can also be run manually.
 
 ## Updating upstream
 

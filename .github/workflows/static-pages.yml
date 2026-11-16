@@ -27,11 +27,18 @@ jobs:
         run: node scripts/check-static-upstream.mjs
       - name: Check browser adapter
         run: pnpm --filter @spotless/web typecheck
+      - name: Browser session smoke test
+        run: pnpm exec tsx apps/web/scripts/static-browser.e2e.ts
       - name: Build static game
         run: pnpm --filter @spotless/web build
         env:
           VITE_STATIC_MODE: 'true'
-      - uses: actions/configure-pages@v5
+      - name: Save portable static files
+        uses: actions/upload-artifact@v4
+        with:
+          name: dishwasherbench-static
+          path: apps/web/dist
+          if-no-files-found: error
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/web/dist
