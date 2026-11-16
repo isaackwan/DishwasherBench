@@ -299,4 +299,4 @@ export const FIRST_CUES: { readonly [id: string]: { readonly in: number; readonl
   };
 
 /** Where the files are served from. */
-export const AUDIO_BASE = '/audio/';
+export const AUDIO_BASE = `${import.meta.env.BASE_URL}audio/`;

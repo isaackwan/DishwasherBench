@@ -1,3 +1,4 @@
+import { localRequest } from './static/client.ts';
 /**
  * The client's side of the server: one function per endpoint, and the session's WebSocket.
  * Every action and query of the game goes through here to the session layer on the server;
@@ -54,6 +55,7 @@ export interface CreatedSession {
 }
 
 async function request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
+  if (import.meta.env.VITE_STATIC_MODE === 'true') return localRequest(method, path, body);
   const response = await fetch(path, {
     method,
     ...(body === undefined
@@ -219,6 +221,7 @@ export class SessionApi {
    * called when the socket closes for whatever reason.
    */
   connect(onMessage: (message: ServerMessage) => void, onClose: () => void): WebSocket {
+    if (import.meta.env.VITE_STATIC_MODE === 'true') return { readyState: WebSocket.CLOSED, close() {} } as WebSocket;
     const scheme = location.protocol === 'https:' ? 'wss' : 'ws';
     const socket = new WebSocket(`${scheme}://${location.host}${this.base}/ws`);
     socket.addEventListener('message', (event) => {
