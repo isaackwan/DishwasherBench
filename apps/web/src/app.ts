@@ -4489,6 +4489,9 @@ export class App {
               : ''
           }`,
         ),
+        import.meta.env.VITE_STATIC_MODE === 'true'
+          ? h('p', { class: 'muted' }, 'Experimental browser edition: the game and wash run on your device. Keep this tab open; refreshing loses the current load. Wash times depend on your hardware and can be long without WebGPU. Results are not verified benchmark records.')
+          : null,
         h(
           'ol',
           { class: 'levels' },
